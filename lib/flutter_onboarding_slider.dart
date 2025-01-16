@@ -51,6 +51,8 @@ class OnBoardingSlider extends StatefulWidget {
   /// Style of the bottom button on the last page.
   final FinishButtonStyle? finishButtonStyle;
 
+  final FinishButtonStyle? skipButtonStyle;
+
   /// Text inside last pages bottom button.
   final String? finishButtonText;
 
@@ -114,6 +116,7 @@ class OnBoardingSlider extends StatefulWidget {
     this.pageBackgroundColor,
     this.pageBackgroundGradient,
     this.finishButtonStyle,
+    this.skipButtonStyle,
     this.finishButtonText,
     this.controllerColor,
     this.addController = true,
@@ -168,56 +171,64 @@ class _OnBoardingSliderState extends State<OnBoardingSlider> {
                 totalPage: widget.totalPage,
                 onPageFinish: widget.onFinish,
                 finishButtonStyle: widget.finishButtonStyle,
+                skipButtonStyle: widget.skipButtonStyle,
                 buttonText: widget.finishButtonText,
                 hasSkip: widget.hasSkip,
               )
             : SizedBox.shrink(),
-        body: Stack(
-          children: [
-            Container(
+        body: CupertinoPageScaffold(
+          navigationBar: OnBoardingNavigationBar(
+            skipFunctionOverride: widget.skipFunctionOverride,
+            leading: widget.leading,
+            middle: widget.middle,
+            totalPage: widget.totalPage,
+            currentPage: _currentPage,
+            onSkip: _onSkip,
+            headerBackgroundColor: widget.headerBackgroundColor,
+            onFinish: widget.trailingFunction,
+            finishButton: widget.trailing,
+            skipTextButton: widget.skipTextButton,
+          ),
+          child: Container(
             height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
               gradient: widget.pageBackgroundGradient ?? null,
               color: widget.pageBackgroundColor ?? null,
             ),
-            child: Background(
-              centerBackground: widget.centerBackground,
-              imageHorizontalOffset: widget.imageHorizontalOffset,
-              imageVerticalOffset: widget.imageVerticalOffset,
-              background: widget.background,
-              speed: widget.speed,
-              totalPage: widget.totalPage,
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(begin: Alignment.bottomRight, colors: [
-                    Colors.black.withOpacity(0.7),
-                    Colors.black.withOpacity(0.389),
-                  ]),
-                ),
-                child: BackgroundBody(
-                  controller: _pageController,
-                  function: slide,
-                  totalPage: widget.totalPage,
-                  bodies: widget.pageBodies,
-                ),
+            child: SafeArea(
+              child: Background(
+                centerBackground: widget.centerBackground,
+                imageHorizontalOffset: widget.imageHorizontalOffset,
+                imageVerticalOffset: widget.imageVerticalOffset,
+                background: widget.background,
+                speed: widget.speed,
+                totalPage: widget.totalPage,
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: BackgroundBody(
+                          controller: _pageController,
+                          function: slide,
+                          totalPage: widget.totalPage,
+                          bodies: widget.pageBodies,
+                        ),
+                      ),
+                      widget.addController
+                          ? BackgroundController(
+                              hasFloatingButton: widget.hasFloatingButton,
+                              indicatorPosition: widget.indicatorPosition,
+                              indicatorAbove: widget.indicatorAbove,
+                              currentPage: _currentPage,
+                              totalPage: widget.totalPage,
+                              controllerColor: widget.controllerColor,
+                            )
+                          : SizedBox.shrink(),
+                    ]),
               ),
             ),
           ),
-            Positioned(
-              bottom: 0,
-              left: MediaQuery.of(context).size.width/3,
-              child: widget.addController
-                  ? BackgroundController(
-                hasFloatingButton: widget.hasFloatingButton,
-                indicatorPosition: widget.indicatorPosition,
-                indicatorAbove: widget.indicatorAbove,
-                currentPage: _currentPage,
-                totalPage: widget.totalPage,
-                controllerColor: widget.controllerColor,
-              )
-                  : SizedBox.shrink(),
-            )
-      ]
         ),
       ),
     );

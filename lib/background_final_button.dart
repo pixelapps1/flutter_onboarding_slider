@@ -45,6 +45,8 @@ class BackgroundFinalButton extends StatelessWidget {
   final bool hasSkip;
   final Icon skipIcon;
   final FinishButtonStyle? finishButtonStyle;
+  final FinishButtonStyle? skipButtonStyle;
+
 
   BackgroundFinalButton({
     required this.currentPage,
@@ -57,6 +59,7 @@ class BackgroundFinalButton extends StatelessWidget {
     required this.hasSkip,
     required this.skipIcon,
     this.finishButtonStyle = const FinishButtonStyle(),
+    this.skipButtonStyle = const FinishButtonStyle(),
   });
 
   @override
@@ -64,12 +67,11 @@ class BackgroundFinalButton extends StatelessWidget {
     return addButton
         ? hasSkip
             ? AnimatedContainer(
-                padding: currentPage == totalPage - 1
-                    ? EdgeInsets.symmetric(horizontal: 30)
-                    : EdgeInsets.all(0),
+                padding: const EdgeInsets.all(0),
                 width: currentPage == totalPage - 1
                     ? MediaQuery.of(context).size.width - 30
                     : 60,
+                height: 60,
                 duration: Duration(milliseconds: 100),
                 child: currentPage == totalPage - 1
                     ? FloatingActionButton.extended(
@@ -94,24 +96,24 @@ class BackgroundFinalButton extends StatelessWidget {
                               ),
                       )
                     : FloatingActionButton(
-                        shape: finishButtonStyle?.shape,
-                        elevation: finishButtonStyle?.elevation,
-                        focusElevation: finishButtonStyle?.focusElevation,
-                        hoverElevation: finishButtonStyle?.hoverElevation,
+                        shape: skipButtonStyle?.shape,
+                        elevation: skipButtonStyle?.elevation,
+                        focusElevation: skipButtonStyle?.focusElevation,
+                        hoverElevation: skipButtonStyle?.hoverElevation,
                         highlightElevation:
-                            finishButtonStyle?.highlightElevation,
-                        disabledElevation: finishButtonStyle?.disabledElevation,
-                        foregroundColor: finishButtonStyle?.foregroundColor,
-                        backgroundColor: finishButtonStyle?.backgroundColor,
-                        focusColor: finishButtonStyle?.focusColor,
-                        hoverColor: finishButtonStyle?.hoverColor,
-                        splashColor: finishButtonStyle?.splashColor,
+                            skipButtonStyle?.highlightElevation,
+                        disabledElevation: skipButtonStyle?.disabledElevation,
+                        foregroundColor: skipButtonStyle?.foregroundColor,
+                        backgroundColor: skipButtonStyle?.backgroundColor,
+                        focusColor: skipButtonStyle?.focusColor,
+                        hoverColor: skipButtonStyle?.hoverColor,
+                        splashColor: skipButtonStyle?.splashColor,
                         onPressed: () => _goToNextPage(context),
                         child: skipIcon,
                       ),
               )
             : Container(
-                padding: EdgeInsets.symmetric(horizontal: 30),
+                padding: const EdgeInsets.symmetric(horizontal: 0),
                 width: MediaQuery.of(context).size.width - 30,
                 child: FloatingActionButton.extended(
                   shape: finishButtonStyle?.shape,
